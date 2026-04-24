@@ -1,0 +1,43 @@
+﻿Γùç injected env (2) from .env // tip: Γùê encrypted .env [www.dotenvx.com]
+Γùç injected env (0) from .env // tip: Γîÿ suppress logs { quiet: true }
+node.exe : ProviderError: 
+insufficient funds for gas * 
+price + value: balance 0, tx 
+cost 731978654492922070, 
+overshot 731978654492922070
+At C:\Program 
+Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS 
+$args
++   
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : N 
+   otSpecified: (ProviderError  
+  : ...978654492922070:String   
+ ) [], RemoteException
+    + FullyQualifiedErrorId : N 
+   ativeCommandError
+ 
+    at HttpProvider.request 
+(C:\Users\David Tembhare\Desktop
+\CertifyChain\blockchain\node_mo
+dules\hardhat\src\internal\core\
+providers\http.ts:116:21)
+    at 
+processTicksAndRejections (node:
+internal/process/task_queues:105
+:5)
+    at HardhatEthersSigner.sendT
+ransaction (C:\Users\David Tembh
+are\Desktop\CertifyChain\blockch
+ain\node_modules\@nomicfoundatio
+n\hardhat-ethers\src\signers.ts:
+185:18)
+    at ContractFactory.deploy 
+(C:\Users\David Tembhare\Desktop
+\CertifyChain\blockchain\node_mo
+dules\ethers\src.ts\contract\fac
+tory.ts:111:24)
+    at main (C:\Users\David Temb
+hare\Desktop\CertifyChain\blockc
+hain\scripts\deploy.js:5:20)
