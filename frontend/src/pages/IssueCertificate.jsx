@@ -25,7 +25,7 @@ export default function IssueCertificate() {
 
   return (
     <div className="max-w-4xl mx-auto flex flex-col gap-12 animate-fade-in relative">
-      <div className="absolute top-40 right-20 w-[300px] h-[300px] bg-indigo-100/30 rounded-full blur-[80px] -z-10 pointer-events-none" />
+      <div className="absolute top-40 right-20 w-[400px] h-[400px] bg-indigo-400/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
       {/* Page Header */}
       <div>
@@ -73,7 +73,7 @@ export default function IssueCertificate() {
             
             <div className="space-y-6">
               <h2 className="text-xs font-bold uppercase tracking-widest text-indigo-900 border-b border-indigo-100 pb-2">Artifact Upload</h2>
-              <div className="border-2 border-dashed border-indigo-200 rounded-xl p-12 flex flex-col items-center justify-center text-center bg-indigo-50/30 hover:bg-indigo-50/80 transition-colors cursor-pointer group">
+              <div className="border border-dashed border-indigo-200 rounded-2xl p-12 flex flex-col items-center justify-center text-center bg-indigo-50/30 hover:bg-indigo-50/80 transition-colors cursor-pointer group">
                 <div className="w-12 h-12 rounded-full bg-white border border-indigo-100 shadow-sm shadow-indigo-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <span className="text-xl font-light text-indigo-600">+</span>
                 </div>
@@ -83,38 +83,43 @@ export default function IssueCertificate() {
             </div>
           </div>
 
-          {/* Sidebar Column */}
-          <div className="lg:col-span-1 space-y-8">
-            <Card className="bg-indigo-50/50 border-indigo-100/50">
-              <h2 className="text-[11px] font-bold uppercase tracking-widest text-indigo-600 mb-6">Ledger Config</h2>
-              <div className="space-y-6">
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-2">Hash ID</label>
-                  <div className="relative">
-                    <Hash size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
-                    <input
-                      type="text"
-                      placeholder="Auto-generated"
-                      className="w-full pl-9 pr-3 py-2 rounded-md border border-zinc-200 bg-white text-xs text-zinc-900 focus:outline-none"
-                      disabled
-                    />
+          {/* High Contrast Dark Sidebar Column */}
+          <div className="lg:col-span-1">
+            <div className="bg-zinc-950 rounded-3xl p-8 border border-zinc-800 shadow-2xl shadow-zinc-900/10 sticky top-24 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-[60px] pointer-events-none" />
+              
+              <div className="relative z-10">
+                <h2 className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-8 border-b border-zinc-800 pb-2">Ledger Config</h2>
+                
+                <div className="space-y-8">
+                  <div>
+                    <label className="text-[10px] font-medium uppercase tracking-widest text-zinc-500 block mb-3">Hash ID</label>
+                    <div className="relative">
+                      <Hash size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" />
+                      <input
+                        type="text"
+                        placeholder="Auto-generated"
+                        className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-300 focus:outline-none"
+                        disabled
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-medium uppercase tracking-widest text-zinc-500 block mb-3">Network</label>
+                    <select className="w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-3 py-2.5 text-xs text-zinc-300 focus:outline-none appearance-none cursor-pointer focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                      <option>Polygon POS</option>
+                      <option>Ethereum Mainnet</option>
+                    </select>
                   </div>
                 </div>
 
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-2">Network</label>
-                  <select className="w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 focus:outline-none appearance-none cursor-pointer focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100">
-                    <option>Polygon POS</option>
-                    <option>Ethereum Mainnet</option>
-                  </select>
+                <div className="pt-8 mt-8 border-t border-zinc-800">
+                  <Button type="submit" variant="primary" size="lg" className="w-full" icon={ArrowRight}>
+                    Commit to Chain
+                  </Button>
                 </div>
               </div>
-            </Card>
-
-            <div className="pt-4 border-t border-zinc-200">
-              <Button type="submit" variant="primary" size="lg" className="w-full" icon={ArrowRight}>
-                Commit to Chain
-              </Button>
             </div>
           </div>
         </div>
