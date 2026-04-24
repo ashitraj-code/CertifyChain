@@ -11,19 +11,19 @@ export default function Button({
   type = 'button',
   disabled = false,
 }) {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 font-bold transition-all duration-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 disabled:opacity-60 disabled:pointer-events-none cursor-pointer';
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer tracking-wide';
   
   const variants = {
-    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md shadow-blue-500/25 border border-transparent focus:ring-blue-500',
-    secondary: 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-sm focus:ring-slate-200',
-    danger: 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 focus:ring-red-500',
-    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-200',
+    primary: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-500/20 border border-transparent focus:ring-indigo-600',
+    secondary: 'bg-white text-zinc-700 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 border border-zinc-200 shadow-[0_1px_2px_rgba(0,0,0,0.02)] focus:ring-indigo-200',
+    danger: 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-100 focus:ring-red-500',
+    ghost: 'bg-transparent text-zinc-500 hover:text-indigo-600 hover:bg-indigo-50 focus:ring-indigo-200',
   };
 
   const sizes = {
     sm: 'px-3 py-1.5 text-xs',
     md: 'px-4 py-2.5 text-sm',
-    lg: 'px-6 py-3.5 text-base',
+    lg: 'px-6 py-3.5 text-sm md:text-base',
   };
 
   const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
@@ -31,7 +31,7 @@ export default function Button({
   if (to) {
     return (
       <Link to={to} className={classes}>
-        {Icon && <Icon size={size === 'sm' ? 14 : size === 'lg' ? 20 : 18} />}
+        {Icon && <Icon size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} strokeWidth={1.5} />}
         <span>{children}</span>
       </Link>
     );
@@ -39,7 +39,7 @@ export default function Button({
 
   return (
     <button type={type} onClick={onClick} className={classes} disabled={disabled}>
-      {Icon && <Icon size={size === 'sm' ? 14 : size === 'lg' ? 20 : 18} />}
+      {Icon && <Icon size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} strokeWidth={1.5} />}
       <span>{children}</span>
     </button>
   );

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Menu, X } from 'lucide-react';
+import { Hexagon, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Button from '../components/Button';
 
@@ -16,96 +16,95 @@ export default function Navbar() {
 
   const navLinks = [
     { to: '/verify', label: 'Verify' },
-    { to: '/registry', label: 'Certificates' },
-    { to: '/dashboard', label: 'Institutions' },
+    { to: '/registry', label: 'Registry' },
   ];
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm border-b border-slate-200' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/80 backdrop-blur-md border-b border-zinc-200/50 shadow-sm shadow-zinc-900/5' : 'bg-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <Shield size={20} className="text-white" />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center group-hover:bg-indigo-100 transition-colors duration-300">
+              <Hexagon size={18} strokeWidth={2} className="text-indigo-600 group-hover:rotate-12 transition-transform duration-500" />
             </div>
-            <span className="text-xl font-bold text-slate-900 tracking-tight">
-              Certi<span className="text-blue-600">Chain</span>
+            <span className="text-lg font-medium text-zinc-900 tracking-tight">
+              CertiChain
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
-                  ${isActive(link.to)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex items-center gap-6">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`text-sm tracking-wide transition-colors duration-300
+                    ${isActive(link.to)
+                      ? 'text-indigo-600 font-medium'
+                      : 'text-zinc-500 hover:text-zinc-900'
+                    }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            
+            <div className="h-4 w-px bg-zinc-200" />
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link to="/help" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">
-              About
-            </Link>
-            <Button variant="primary" to="/dashboard">
-              Admin Portal
-            </Button>
+            <div className="flex items-center gap-4">
+              <Link to="/help" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors tracking-wide">
+                Docs
+              </Link>
+              <Button variant="primary" to="/dashboard">
+                Admin Portal
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+            className="md:hidden p-2 -mr-2 text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Overlay */}
       {mobileOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-200 shadow-xl animate-fade-in">
-          <div className="px-4 pt-2 pb-6 flex flex-col gap-2">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-zinc-200 shadow-xl animate-fade-in">
+          <div className="px-6 py-8 flex flex-col gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 onClick={() => setMobileOpen(false)}
-                className={`px-4 py-3 rounded-xl text-base font-semibold transition-colors
+                className={`text-lg tracking-wide transition-colors
                   ${isActive(link.to)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'text-indigo-600 font-medium'
+                    : 'text-zinc-500'
                   }`}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="h-px bg-slate-200 my-2" />
             <Link
               to="/help"
               onClick={() => setMobileOpen(false)}
-              className="px-4 py-3 rounded-xl text-base font-semibold text-slate-600 hover:bg-slate-50"
+              className="text-lg text-zinc-500 tracking-wide"
             >
-              About
+              Docs
             </Link>
-            <Link
-              to="/dashboard"
-              onClick={() => setMobileOpen(false)}
-              className="mt-2 px-4 py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 text-center shadow-md shadow-blue-500/20"
-            >
-              Admin Portal
-            </Link>
+            <div className="pt-4 mt-2 border-t border-zinc-100">
+              <Button variant="primary" className="w-full" to="/dashboard">
+                Admin Portal
+              </Button>
+            </div>
           </div>
         </div>
       )}

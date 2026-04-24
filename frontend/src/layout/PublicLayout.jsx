@@ -3,31 +3,33 @@ import Navbar from './Navbar';
 
 export default function PublicLayout() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans selection:bg-zinc-200 selection:text-zinc-900">
       <Navbar />
       
-      <main className="flex-1 flex flex-col">
-        <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-in">
+      <main className="flex-1 flex flex-col pt-20">
+        <div className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-24 animate-fade-in">
           <Outlet />
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-500">
-              © 2026 CertiChain. Secured by blockchain cryptography.
-            </p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
-                Privacy Policy
+      {/* Minimal Footer */}
+      <footer className="bg-[#fafafa] border-t border-zinc-200/50 mt-auto">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-zinc-900" />
+              <span className="text-sm font-medium text-zinc-900 tracking-wide">CertiChain</span>
+            </div>
+            
+            <div className="flex items-center gap-8">
+              <a href="#" className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors uppercase tracking-widest">
+                Privacy
               </a>
-              <a href="#" className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
-                Terms of Service
+              <a href="#" className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors uppercase tracking-widest">
+                Terms
               </a>
-              <a href="#" className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
-                API Docs
+              <a href="#" className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors uppercase tracking-widest">
+                API
               </a>
             </div>
           </div>

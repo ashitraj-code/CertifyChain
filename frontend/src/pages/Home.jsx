@@ -1,159 +1,97 @@
-import { Shield, ScanLine, Award, ArrowRight, Lock, Globe, Zap, CheckCircle2 } from 'lucide-react';
+import { Hexagon, ScanLine, ArrowRight } from 'lucide-react';
 import Button from '../components/Button';
-
-const features = [
-  {
-    icon: Lock,
-    title: 'Cryptographic Proof',
-    desc: 'Every certificate is anchored to an immutable blockchain ledger using cryptographic hashing.',
-  },
-  {
-    icon: Globe,
-    title: 'Global Verification',
-    desc: 'Verify any credential from anywhere in the world with instant on-chain lookups.',
-  },
-  {
-    icon: Zap,
-    title: 'Instant Issuance',
-    desc: 'Mint certificates in seconds with our streamlined institutional portal.',
-  },
-];
-
-const stats = [
-  { value: '12,450+', label: 'Certificates Issued' },
-  { value: '48', label: 'Active Courses' },
-  { value: '99.9%', label: 'Uptime Guarantee' },
-  { value: '3,210', label: 'Monthly Verifications' },
-];
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-24 md:gap-32">
-      {/* Hero Section */}
-      <section className="relative pt-12 md:pt-20">
-        {/* Background Gradients */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-400/10 rounded-full blur-3xl" />
-        </div>
+    <div className="flex flex-col relative">
+      {/* Soft Background Glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-200/30 rounded-full blur-[100px] -z-10 pointer-events-none" />
+      <div className="absolute top-40 left-0 w-[400px] h-[400px] bg-sky-200/20 rounded-full blur-[100px] -z-10 pointer-events-none" />
 
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold tracking-wide mb-8 animate-fade-in">
-            <CheckCircle2 size={16} />
-            Trusted by 200+ Institutions Worldwide
+      {/* Minimal Hero */}
+      <section className="pt-20 pb-32 md:pt-32 md:pb-48">
+        <div className="max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-100 bg-indigo-50/50 mb-8 animate-fade-in">
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+            <span className="text-[11px] font-medium uppercase tracking-widest text-indigo-700">Institutional Grade Verification</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 animate-fade-in stagger-1">
-            Secure Certificate{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Verification
-            </span>{' '}
-            on Blockchain
+          <h1 className="text-5xl md:text-8xl font-light text-zinc-900 tracking-tight leading-[1.1] mb-8 animate-fade-in stagger-1">
+            Trust,<br />
+            <span className="font-medium text-zinc-400">cryptographically</span><br />
+            secured.
           </h1>
 
-          <p className="text-lg md:text-xl text-slate-600 font-medium leading-relaxed mb-10 max-w-2xl mx-auto animate-fade-in stagger-2">
-            Issue and verify certificates instantly and securely. Our cryptographic transparency ensures high-stakes verification environments remain reliable and immutable.
+          <p className="text-lg text-zinc-500 font-light leading-relaxed max-w-xl mb-12 animate-fade-in stagger-2">
+            A minimalist protocol for issuing and verifying academic and professional credentials on the blockchain. No fluff, just mathematical certainty.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in stagger-3">
-            <Button variant="primary" size="lg" to="/verify" icon={ScanLine} className="w-full sm:w-auto">
-              Verify Certificate
+          <div className="flex items-center gap-6 animate-fade-in stagger-3">
+            <Button variant="primary" size="lg" to="/verify" icon={ScanLine}>
+              Verify Document
             </Button>
-            <Button variant="secondary" size="lg" to="/issue" icon={Award} className="w-full sm:w-auto">
-              Issue Certificate
+            <Button variant="ghost" size="lg" to="/dashboard" icon={ArrowRight}>
+              Admin Portal
             </Button>
-          </div>
-        </div>
-
-        {/* Hero Visual Node Graph */}
-        <div className="mt-20 relative max-w-4xl mx-auto animate-fade-in stagger-4">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/60 p-6 md:p-8 shadow-2xl shadow-slate-200/50">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((block) => (
-                <div key={block} className="bg-slate-50 rounded-2xl p-5 border border-slate-200 shadow-sm relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/5 to-blue-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                      Block #{18236670 + block}
-                    </span>
-                  </div>
-                  <p className="text-xs font-mono text-slate-600 mb-2 truncate">
-                    0x{Math.random().toString(16).slice(2, 14)}...
-                  </p>
-                  <div className="flex items-center gap-1.5 text-[10px] text-green-600 font-bold uppercase tracking-wider">
-                    <CheckCircle2 size={12} />
-                    Confirmed
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* Chain connectors */}
-            <div className="hidden md:flex absolute top-1/2 left-0 w-full -translate-y-1/2 items-center justify-evenly pointer-events-none px-20">
-               <ArrowRight className="text-slate-300" />
-               <ArrowRight className="text-slate-300" />
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="bg-slate-900 rounded-3xl p-8 md:p-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative z-10">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="text-center">
-              <p className="text-3xl md:text-5xl font-extrabold text-white mb-2">
-                {stat.value}
-              </p>
-              <p className="text-xs md:text-sm font-semibold uppercase tracking-widest text-slate-400">
-                {stat.label}
-              </p>
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-zinc-200 to-transparent my-12" />
+
+      {/* Stats - Brutalist/Minimal Grid with Subtle Color */}
+      <section className="py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
+          {[
+            { v: '12.4k', l: 'Certificates', c: 'border-indigo-200 text-indigo-900' },
+            { v: '48', l: 'Institutions', c: 'border-sky-200 text-sky-900' },
+            { v: '0ms', l: 'Latency', c: 'border-emerald-200 text-emerald-900' },
+            { v: '100%', l: 'Immutable', c: 'border-purple-200 text-purple-900' },
+          ].map((stat, idx) => (
+            <div key={idx} className={`flex flex-col gap-2 border-l ${stat.c.split(' ')[0]} pl-6`}>
+              <span className={`text-4xl md:text-5xl font-light tracking-tight ${stat.c.split(' ')[1]}`}>{stat.v}</span>
+              <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-400">{stat.l}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-          Institutional-Grade Security
-        </h2>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-16">
-          Built for universities, certification bodies, and enterprise HR departments who demand cryptographic verification.
-        </p>
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-zinc-200 to-transparent my-12" />
 
-        <div className="grid md:grid-cols-3 gap-8 text-left">
-          {features.map((feature, idx) => {
-            const IconComp = feature.icon;
-            return (
-              <div key={idx} className="bg-white rounded-3xl border border-slate-200 p-8 hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 group">
-                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors duration-300">
-                  <IconComp size={28} className="text-blue-600 group-hover:text-white transition-colors duration-300" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-slate-600 leading-relaxed">
-                  {feature.desc}
-                </p>
-              </div>
-            );
-          })}
+      {/* Concept Section */}
+      <section className="py-20 grid md:grid-cols-2 gap-16 items-center relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-100/30 rounded-full blur-[100px] -z-10 pointer-events-none" />
+        
+        <div>
+          <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-8">
+            <Hexagon size={24} strokeWidth={1.5} className="text-indigo-600" />
+          </div>
+          <h2 className="text-3xl font-light text-zinc-900 tracking-tight mb-6">
+            The end of credential fraud.
+          </h2>
+          <p className="text-zinc-500 font-light leading-relaxed mb-6">
+            By anchoring certificates to decentralized ledgers, we eliminate the need for manual verification processes, phone calls, and transcript requests. 
+          </p>
+          <p className="text-zinc-500 font-light leading-relaxed">
+            The cryptographic hash serves as an eternal source of truth that anyone can verify instantly.
+          </p>
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-3xl p-10 md:p-16 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-          Ready to get started?
-        </h2>
-        <p className="text-lg text-slate-600 mb-8 max-w-xl mx-auto">
-          Join hundreds of institutions already using CertiChain for tamper-proof credential management.
-        </p>
-        <Button variant="primary" size="lg" to="/dashboard" icon={ArrowRight}>
-          Access Admin Portal
-        </Button>
+        <div className="bg-white/80 backdrop-blur-xl border border-zinc-200 rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full blur-3xl" />
+          <div className="flex flex-col gap-4 relative z-10">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-4 p-4 rounded-xl border border-white bg-white/50 shadow-sm backdrop-blur-md">
+                <div className="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-medium text-indigo-600">{i}</span>
+                </div>
+                <div className="flex-1">
+                  <div className="h-2 bg-zinc-200 rounded-full w-24 mb-2" />
+                  <div className="h-2 bg-zinc-100 rounded-full w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );
