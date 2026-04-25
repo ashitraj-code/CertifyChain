@@ -30,21 +30,22 @@ export default function Success() {
     const img = new Image();
     
     img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height + 40; // Extra space for padding/text
+      const padding = 32;
+      canvas.width = img.width + padding * 2;
+      canvas.height = img.height + 50 + padding * 2; // Extra space for padding/text
       
       // Draw white background
-      ctx.fillStyle = "white";
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       // Draw QR Code
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, padding, padding);
       
       // Draw Token ID below
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "#000000";
       ctx.font = "bold 16px monospace";
       ctx.textAlign = "center";
-      ctx.fillText(formatTokenId(cert.id), canvas.width / 2, canvas.height - 15);
+      ctx.fillText(formatTokenId(cert.id), canvas.width / 2, canvas.height - 20);
       
       // Download
       const pngFile = canvas.toDataURL("image/png");
@@ -115,8 +116,8 @@ export default function Success() {
 
               {/* QR Code Section */}
               <div className="flex flex-col items-center justify-center pt-8 border-t border-zinc-800">
-                <div className="bg-white p-4 rounded-xl mb-4">
-                  <QRCode id="QRCode" value={formatTokenId(cert.id)} size={120} />
+                <div className="bg-white p-6 rounded-2xl mb-4 border-8 border-white shadow-xl inline-block">
+                  <QRCode id="QRCode" value={formatTokenId(cert.id)} size={140} bgColor="#ffffff" fgColor="#000000" />
                 </div>
                 <button 
                   onClick={downloadQR}

@@ -5,6 +5,10 @@ import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
 import API_BASE from '../config/api';
 import { formatTokenId } from '../utils/formatters';
+import { Download } from 'lucide-react';
+import QRCodeModule from 'react-qr-code';
+
+const QRCode = typeof QRCodeModule === 'function' ? QRCodeModule : (QRCodeModule.QRCode || QRCodeModule.default || QRCodeModule);
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -85,6 +89,39 @@ export default function Dashboard() {
     if (diffMins < 60) return `${diffMins} min ago`;
     if (diffHrs < 24) return `${diffHrs} hours ago`;
     return `${diffDays} days ago`;
+  };
+
+  const downloadQR = (tokenId) => {
+    const svgId = `QRCode-${tokenId}`;
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    img.onload = () => {
+      const padding = 32;
+      canvas.width = img.width + padding * 2;
+      canvas.height = img.height + 50 + padding * 2;
+      
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, padding, padding);
+      
+      ctx.fillStyle = "#000000";
+      ctx.font = "bold 16px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(formatTokenId(tokenId), canvas.width / 2, canvas.height - 20);
+      
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `Certificate_QR_${formatTokenId(tokenId)}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
+    
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
   };
 
   if (loading) {
@@ -170,8 +207,22 @@ export default function Dashboard() {
                       <td className="px-6 py-4 font-medium text-zinc-900">{item.studentName}</td>
                       <td className="px-6 py-4 text-zinc-500">{item.course}</td>
                       <td className="px-6 py-4 text-zinc-400 text-xs">{formatTimeAgo(item.createdAt)}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 flex items-center justify-between gap-4">
                         <StatusBadge status={item.status === 'Active' ? 'Minted' : item.status} />
+                        
+                        {/* Hidden QR Generator combined with Download button */}
+                        <div className="flex items-center gap-2">
+                          <button 
+                            onClick={() => downloadQR(item.tokenId)}
+                            className="p-1.5 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-500/10 rounded-md transition-colors"
+                            title="Regenerate & Download QR Code"
+                          >
+                            <Download size={16} />
+                          </button>
+                          <div style={{ display: 'none' }}>
+                            <QRCode id={`QRCode-${item.tokenId}`} value={formatTokenId(item.tokenId)} size={120} />
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))

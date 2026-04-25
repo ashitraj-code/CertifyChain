@@ -35,17 +35,18 @@ export default function ResultValid() {
     const img = new Image();
     
     img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height + 40;
+      const padding = 32;
+      canvas.width = img.width + padding * 2;
+      canvas.height = img.height + 50 + padding * 2;
       
-      ctx.fillStyle = "white";
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, padding, padding);
       
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "#000000";
       ctx.font = "bold 16px monospace";
       ctx.textAlign = "center";
-      ctx.fillText(formatTokenId(cert.id), canvas.width / 2, canvas.height - 15);
+      ctx.fillText(formatTokenId(cert.id), canvas.width / 2, canvas.height - 20);
       
       const pngFile = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
@@ -170,8 +171,8 @@ export default function ResultValid() {
               {/* QR Code Segment */}
               <div className="flex flex-col items-center justify-center pt-6 border-t border-surface-container-high">
                 <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Official QR Code</p>
-                <div className="bg-white p-3 rounded-xl mb-4 border border-outline-variant">
-                  <QRCode id="QRCode" value={formatTokenId(cert.id)} size={96} />
+                <div className="bg-white p-6 rounded-2xl mb-4 border-8 border-white shadow-xl inline-block">
+                  <QRCode id="QRCode" value={formatTokenId(cert.id)} size={120} bgColor="#ffffff" fgColor="#000000" />
                 </div>
                 <button 
                   onClick={downloadQR}
