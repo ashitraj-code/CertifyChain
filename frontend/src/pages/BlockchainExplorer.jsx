@@ -58,7 +58,7 @@ export default function BlockchainExplorer() {
     <div className="animate-fade-in">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-on-surface tracking-tight">Blockchain Explorer</h1>
-        <p className="text-sm text-on-surface-variant mt-1">Live view of CertiChain cryptographic events and verifications.</p>
+        <p className="text-sm text-on-surface-variant mt-1">Live view of BlockCert cryptographic events and verifications.</p>
       </div>
 
       {/* Network Stats */}

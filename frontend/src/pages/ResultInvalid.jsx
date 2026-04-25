@@ -57,7 +57,7 @@ export default function ResultInvalid() {
           <ul className="space-y-3">
             {[
               'The Token ID was entered incorrectly',
-              'The certificate was issued outside the CertiChain network',
+              'The certificate was issued outside the BlockCert network',
               'The credential has been permanently revoked by the issuing institution',
               'The digital signature has been tampered with or corrupted',
             ].map((reason, idx) => (

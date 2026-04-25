@@ -18,7 +18,7 @@ export default function PublicLayout() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-zinc-900" />
-              <span className="text-sm font-medium text-zinc-900 tracking-wide">CertiChain</span>
+              <span className="text-sm font-medium text-zinc-900 tracking-wide">BlockCert</span>
             </div>
             
             <div className="flex items-center gap-8">

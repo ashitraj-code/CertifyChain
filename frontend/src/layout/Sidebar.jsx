@@ -34,7 +34,7 @@ export default function Sidebar({ onClose }) {
             <Hexagon size={18} strokeWidth={2} className="text-indigo-600 group-hover:rotate-12 transition-transform duration-500" />
           </div>
           <span className="text-sm font-medium text-zinc-900 tracking-wider uppercase">
-            CertiChain
+            BlockCert
           </span>
         </Link>
         <button className="md:hidden p-1 text-zinc-400 hover:text-zinc-900 cursor-pointer" onClick={onClose}>
