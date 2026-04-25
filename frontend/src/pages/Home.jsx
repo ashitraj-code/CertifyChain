@@ -9,7 +9,7 @@ export default function Home() {
       <div className="absolute top-40 left-0 w-[500px] h-[500px] bg-sky-400/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
       {/* Minimal Hero */}
-      <section className="pt-16 pb-32 md:pt-24 md:pb-40">
+      <section className=" pb-32  md:pb-40">
         <div className="max-w-4xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-200/50 bg-indigo-50 mb-8 animate-fade-in shadow-sm shadow-indigo-500/5">
             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
