@@ -1,7 +1,8 @@
 import { useLocation } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, ExternalLink, Shield, Calendar, User, Award, Hash, Copy } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ExternalLink, Shield, Calendar, User, Award, Hash, Copy, FileText, Database } from 'lucide-react';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import { formatTokenId, getIpfsUrl, getPolygonscanUrl } from '../utils/formatters';
 
 export default function ResultValid() {
   const location = useLocation();
@@ -56,7 +57,7 @@ export default function ResultValid() {
             <div>
               <p className="text-sm font-bold text-success">Blockchain Verified — {status}</p>
               <p className="text-xs text-success/70">
-                Cryptographic signature confirmed • Token #{cert.id}
+                Cryptographic signature confirmed • {formatTokenId(cert.id)}
               </p>
             </div>
           </div>
@@ -74,8 +75,8 @@ export default function ResultValid() {
                 <Hash size={16} className="text-primary-container" />
               </div>
               <div>
-                <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">Token ID</p>
-                <p className="text-sm font-bold text-on-surface font-mono">{cert.id}</p>
+                <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">Token Identifier</p>
+                <p className="text-sm font-bold text-on-surface font-mono">{formatTokenId(cert.id)}</p>
               </div>
             </div>
 
@@ -111,45 +112,31 @@ export default function ResultValid() {
 
             <hr className="border-surface-container-high" />
 
-            {/* IPFS Hash */}
+            {/* Technical Evidence Section */}
             <div>
-              <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-2">IPFS Hash</p>
-              <div className="flex items-center gap-2 bg-surface-container-low rounded-lg px-4 py-3">
-                <code className="text-xs font-mono text-primary-container flex-1 truncate">{cert.ipfsHash}</code>
-                <button onClick={() => copyToClipboard(cert.ipfsHash)} className="p-1.5 rounded-md hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors cursor-pointer">
-                  <Copy size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* Transaction Hash */}
-            <div>
-              <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-2">
-                Transaction Hash
-              </p>
-              <div className="flex items-center gap-2 bg-surface-container-low rounded-lg px-4 py-3">
-                <code className="text-xs font-mono text-primary-container flex-1 truncate">
-                  {cert.txHash}
-                </code>
-                <button onClick={() => copyToClipboard(cert.txHash)} className="p-1.5 rounded-md hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors cursor-pointer">
-                  <Copy size={14} />
-                </button>
+              <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Technical Evidence</p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a 
+                  href={getIpfsUrl(cert.ipfsHash)} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-outline-variant bg-surface-container-low hover:bg-surface-container-high transition-colors text-sm font-semibold text-on-surface"
+                >
+                  <FileText size={16} className="text-primary-container" /> View Document
+                </a>
+                <a 
+                  href={getPolygonscanUrl(cert.txHash)} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-outline-variant bg-surface-container-low hover:bg-surface-container-high transition-colors text-sm font-semibold text-on-surface"
+                >
+                  <Database size={16} className="text-primary-container" /> View on Ledger
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-surface-container-high">
-            <a
-              href={cert.txHash !== 'N/A' ? `https://amoy.polygonscan.com/tx/${cert.txHash}` : '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full"
-            >
-              <Button variant="primary" className="w-full" icon={ExternalLink}>
-                View on Polygonscan
-              </Button>
-            </a>
-          </div>
+          {/* Remove the redundant 'View on Polygonscan' bottom button since it's now in Technical Evidence */}
         </Card>
       </div>
     </div>

@@ -4,6 +4,7 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
 import API_BASE from '../config/api';
+import { formatTokenId } from '../utils/formatters';
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -165,7 +166,7 @@ export default function Dashboard() {
                 ) : (
                   certificates.map((item) => (
                     <tr key={item._id} className="hover:bg-zinc-50/50 transition-colors">
-                      <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">#{item.tokenId}</td>
+                      <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">{formatTokenId(item.tokenId)}</td>
                       <td className="px-6 py-4 font-medium text-zinc-900">{item.studentName}</td>
                       <td className="px-6 py-4 text-zinc-500">{item.course}</td>
                       <td className="px-6 py-4 text-zinc-400 text-xs">{formatTimeAgo(item.createdAt)}</td>

@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import { Check, Copy, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Check, Copy, ArrowRight, ArrowUpRight, FileText, Database } from 'lucide-react';
 import Button from '../components/Button';
+import { formatTokenId, getIpfsUrl, getPolygonscanUrl } from '../utils/formatters';
 
 export default function Success() {
   const location = useLocation();
@@ -34,7 +35,7 @@ export default function Success() {
             Successfully Minted
           </h1>
           <p className="text-emerald-600/80 font-medium">
-            Certificate NFT minted • Token #{cert.id}
+            Certificate NFT minted • {formatTokenId(cert.id)}
           </p>
         </div>
 
@@ -45,8 +46,8 @@ export default function Success() {
           <div className="flex flex-col gap-8 relative z-10">
             <div className="flex items-center justify-between p-4 bg-zinc-900/50 rounded-xl border border-zinc-800">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Token ID</p>
-                <p className="text-sm font-mono font-medium text-emerald-400">#{cert.id}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Token Identifier</p>
+                <p className="text-sm font-mono font-medium text-emerald-400">{formatTokenId(cert.id)}</p>
               </div>
               <button onClick={() => copyToClipboard(String(cert.id))} className="p-2 rounded text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800 transition-colors">
                 <Copy size={16} strokeWidth={1.5} />
@@ -62,21 +63,16 @@ export default function Success() {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Credential</p>
                 <p className="text-sm font-bold text-white">{cert.course}</p>
               </div>
-              <div className="flex justify-between items-end border-b border-zinc-800 pb-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">IPFS</p>
-                <p className="text-sm font-mono text-emerald-500 truncate max-w-[200px]">{cert.ipfsHash}</p>
-              </div>
-              <div className="flex justify-between items-end border-b border-zinc-800 pb-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Transaction</p>
-                <a
-                  href={`https://amoy.polygonscan.com/tx/${cert.txHash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-sm font-mono text-emerald-500 hover:text-emerald-400 transition-colors truncate max-w-[200px]"
-                >
-                  {cert.txHash.substring(0, 10)}...{cert.txHash.substring(cert.txHash.length - 8)}
-                  <ArrowUpRight size={14} strokeWidth={1.5} />
-                </a>
+              <div className="flex flex-col gap-3 pt-4 border-t border-zinc-800">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Technical Evidences</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <a href={getIpfsUrl(cert.ipfsHash)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 p-3 rounded-lg border border-zinc-800 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-xs font-semibold text-zinc-300 hover:text-emerald-400 transition-all">
+                    <FileText size={14} /> View Document
+                  </a>
+                  <a href={getPolygonscanUrl(cert.txHash)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 p-3 rounded-lg border border-zinc-800 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-xs font-semibold text-zinc-300 hover:text-emerald-400 transition-all">
+                    <Database size={14} /> View on Ledger
+                  </a>
+                </div>
               </div>
             </div>
 

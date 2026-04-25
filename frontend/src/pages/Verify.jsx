@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, QrCode, ArrowRight, Loader2 } from 'lucide-react';
 import Button from '../components/Button';
 import API_BASE from '../config/api';
+import { parseTokenId } from '../utils/formatters';
 
 export default function Verify() {
   const [certId, setCertId] = useState('');
@@ -16,9 +17,12 @@ export default function Verify() {
 
     setLoading(true);
     setError('');
+    
+    // Parse the token ID (e.g., CRT-0001 -> 1)
+    const rawTokenId = parseTokenId(certId);
 
     try {
-      const response = await fetch(`${API_BASE}/verify/${certId.trim()}`);
+      const response = await fetch(`${API_BASE}/verify/${rawTokenId}`);
       const result = await response.json();
 
       if (result.success && result.status === 'VALID') {
@@ -73,7 +77,7 @@ export default function Verify() {
                 type="text"
                 value={certId}
                 onChange={(e) => setCertId(e.target.value)}
-                placeholder="Token ID (e.g. 0, 1, 2...)"
+                placeholder="Token ID (e.g. CRT-0001 or 1)"
                 className="w-full pl-10 pr-4 py-4 bg-transparent border-b border-zinc-200 text-xl font-light text-zinc-900 placeholder:text-zinc-300 focus:border-indigo-600 focus:outline-none transition-all"
               />
             </div>

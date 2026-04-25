@@ -3,6 +3,7 @@ import { Search, AlertTriangle, Ban, Clock, XCircle, Loader2 } from 'lucide-reac
 import Card from '../components/Card';
 import Button from '../components/Button';
 import API_BASE from '../config/api';
+import { parseTokenId, formatTokenId } from '../utils/formatters';
 
 export default function Revocation() {
   const [searchId, setSearchId] = useState('');
@@ -34,13 +35,15 @@ export default function Revocation() {
     if (!searchId.trim()) return;
     setError('');
     setFoundCert(null);
+    
+    const rawTokenId = parseTokenId(searchId);
 
     try {
       const response = await fetch(`${API_BASE}/certificates`);
       const data = await response.json();
 
       if (data.success) {
-        const cert = data.data.find((c) => String(c.tokenId) === searchId.trim());
+        const cert = data.data.find((c) => String(c.tokenId) === rawTokenId);
         if (cert) {
           setFoundCert(cert);
         } else {
@@ -132,7 +135,7 @@ export default function Revocation() {
                 <div className="relative flex-1">
                   <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
                   <input type="text" value={searchId} onChange={(e) => setSearchId(e.target.value)}
-                    placeholder="e.g. 0, 1, 2..."
+                    placeholder="e.g. CRT-0001 or 1..."
                     className="w-full pl-10 pr-4 py-3 rounded-xl border border-outline-variant bg-white text-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 focus:outline-none transition-all" />
                 </div>
                 <Button variant="secondary" onClick={handleSearch}>Search</Button>
@@ -143,7 +146,7 @@ export default function Revocation() {
               <div className="bg-surface-container-low rounded-xl p-4 border border-surface-container-high animate-fade-in">
                 <p className="text-[10px] uppercase tracking-widest text-on-surface-variant font-semibold mb-1">Found Credential</p>
                 <p className="text-sm font-bold text-on-surface">{foundCert.course}</p>
-                <p className="text-xs text-on-surface-variant">{foundCert.studentName} • Token #{foundCert.tokenId}</p>
+                <p className="text-xs text-on-surface-variant">{foundCert.studentName} • {formatTokenId(foundCert.tokenId)}</p>
                 {foundCert.status === 'Revoked' && (
                   <p className="text-xs text-red-500 mt-1 font-semibold">Already Revoked</p>
                 )}

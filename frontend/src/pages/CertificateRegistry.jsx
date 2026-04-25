@@ -4,6 +4,7 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
 import API_BASE from '../config/api';
+import { formatTokenId } from '../utils/formatters';
 
 export default function CertificateRegistry() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -115,7 +116,7 @@ export default function CertificateRegistry() {
                 ) : (
                   filtered.map((cert) => (
                     <tr key={cert._id} className="hover:bg-zinc-50/50 transition-colors group">
-                      <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">#{cert.tokenId}</td>
+                      <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">{formatTokenId(cert.tokenId)}</td>
                       <td className="px-6 py-4 font-medium text-zinc-900">{cert.studentName}</td>
                       <td className="px-6 py-4 text-zinc-500">{cert.course}</td>
                       <td className="px-6 py-4"><StatusBadge status={cert.status} /></td>
