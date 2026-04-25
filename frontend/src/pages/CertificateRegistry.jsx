@@ -4,7 +4,7 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
 import API_BASE from '../config/api';
-import { formatTokenId } from '../utils/formatters';
+import { formatTokenId, getPolygonscanUrl } from '../utils/formatters';
 import QRCodeModule from 'react-qr-code';
 
 const QRCode = typeof QRCodeModule === 'function' ? QRCodeModule : (QRCodeModule.QRCode || QRCodeModule.default || QRCodeModule);
