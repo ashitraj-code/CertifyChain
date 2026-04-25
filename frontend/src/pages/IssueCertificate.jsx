@@ -61,7 +61,12 @@ export default function IssueCertificate() {
         body: data,
       });
 
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        throw new Error(`Server returned a non-JSON error. Status: ${response.status}`);
+      }
 
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Minting failed');

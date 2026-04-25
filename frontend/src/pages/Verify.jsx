@@ -4,22 +4,25 @@ import { Search, QrCode, ArrowRight, Loader2 } from 'lucide-react';
 import Button from '../components/Button';
 import API_BASE from '../config/api';
 import { parseTokenId } from '../utils/formatters';
+import QRScanner from '../components/QRScanner';
 
 export default function Verify() {
   const [certId, setCertId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isScanning, setIsScanning] = useState(false);
   const navigate = useNavigate();
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
-    if (!certId.trim()) return;
+  const handleVerify = async (e, scannedId = null) => {
+    if (e) e.preventDefault();
+    const tokenToVerify = scannedId || certId;
+    if (!tokenToVerify.trim()) return;
 
     setLoading(true);
     setError('');
     
     // Parse the token ID (e.g., CRT-0001 -> 1)
-    const rawTokenId = parseTokenId(certId);
+    const rawTokenId = parseTokenId(tokenToVerify);
 
     try {
       const response = await fetch(`${API_BASE}/verify/${rawTokenId}`);
@@ -101,13 +104,27 @@ export default function Verify() {
                 Use your device camera to scan the QR code printed on the physical credential.
               </p>
               
-              <button className="mt-8 px-6 py-2.5 rounded-full border border-zinc-800 text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-white hover:border-zinc-700 transition-colors">
+              <button 
+                onClick={() => setIsScanning(true)}
+                className="mt-8 px-6 py-2.5 rounded-full border border-zinc-800 text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-white hover:border-zinc-700 hover:bg-zinc-800 transition-colors cursor-pointer"
+              >
                 Open Camera
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {isScanning && (
+        <QRScanner 
+          onScan={(scannedToken) => {
+            setIsScanning(false);
+            setCertId(scannedToken);
+            handleVerify(null, scannedToken);
+          }}
+          onClose={() => setIsScanning(false)}
+        />
+      )}
     </div>
   );
 }

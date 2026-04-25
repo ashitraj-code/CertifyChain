@@ -1,7 +1,10 @@
 import { useLocation } from 'react-router-dom';
-import { Check, Copy, ArrowRight, ArrowUpRight, FileText, Database } from 'lucide-react';
+import { Check, Copy, ArrowRight, ArrowUpRight, FileText, Database, Download } from 'lucide-react';
 import Button from '../components/Button';
 import { formatTokenId, getIpfsUrl, getPolygonscanUrl } from '../utils/formatters';
+import QRCodeModule from 'react-qr-code';
+
+const QRCode = typeof QRCodeModule === 'function' ? QRCodeModule : (QRCodeModule.QRCode || QRCodeModule.default || QRCodeModule);
 
 export default function Success() {
   const location = useLocation();
@@ -17,6 +20,41 @@ export default function Success() {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
+  };
+
+  const downloadQR = () => {
+    const svg = document.getElementById("QRCode");
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height + 40; // Extra space for padding/text
+      
+      // Draw white background
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw QR Code
+      ctx.drawImage(img, 0, 0);
+      
+      // Draw Token ID below
+      ctx.fillStyle = "black";
+      ctx.font = "bold 16px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(formatTokenId(cert.id), canvas.width / 2, canvas.height - 15);
+      
+      // Download
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `Certificate_QR_${formatTokenId(cert.id)}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
+    
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
   };
 
   return (
@@ -73,6 +111,19 @@ export default function Success() {
                     <Database size={14} /> View on Ledger
                   </a>
                 </div>
+              </div>
+
+              {/* QR Code Section */}
+              <div className="flex flex-col items-center justify-center pt-8 border-t border-zinc-800">
+                <div className="bg-white p-4 rounded-xl mb-4">
+                  <QRCode id="QRCode" value={formatTokenId(cert.id)} size={120} />
+                </div>
+                <button 
+                  onClick={downloadQR}
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 border border-emerald-500/20 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
+                >
+                  <Download size={14} /> Download QR Code
+                </button>
               </div>
             </div>
 

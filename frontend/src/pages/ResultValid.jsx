@@ -1,8 +1,11 @@
 import { useLocation } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, ExternalLink, Shield, Calendar, User, Award, Hash, Copy, FileText, Database } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ExternalLink, Shield, Calendar, User, Award, Hash, Copy, FileText, Database, Download } from 'lucide-react';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import { formatTokenId, getIpfsUrl, getPolygonscanUrl } from '../utils/formatters';
+import QRCodeModule from 'react-qr-code';
+
+const QRCode = typeof QRCodeModule === 'function' ? QRCodeModule : (QRCodeModule.QRCode || QRCodeModule.default || QRCodeModule);
 
 export default function ResultValid() {
   const location = useLocation();
@@ -22,6 +25,36 @@ export default function ResultValid() {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
+  };
+
+  const downloadQR = () => {
+    const svg = document.getElementById("QRCode");
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height + 40;
+      
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      
+      ctx.fillStyle = "black";
+      ctx.font = "bold 16px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(formatTokenId(cert.id), canvas.width / 2, canvas.height - 15);
+      
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `Certificate_QR_${formatTokenId(cert.id)}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
+    
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
   };
 
   return (
@@ -115,7 +148,7 @@ export default function ResultValid() {
             {/* Technical Evidence Section */}
             <div>
               <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Technical Evidence</p>
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row gap-3 mb-6">
                 <a 
                   href={getIpfsUrl(cert.ipfsHash)} 
                   target="_blank" 
@@ -132,6 +165,20 @@ export default function ResultValid() {
                 >
                   <Database size={16} className="text-primary-container" /> View on Ledger
                 </a>
+              </div>
+
+              {/* QR Code Segment */}
+              <div className="flex flex-col items-center justify-center pt-6 border-t border-surface-container-high">
+                <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Official QR Code</p>
+                <div className="bg-white p-3 rounded-xl mb-4 border border-outline-variant">
+                  <QRCode id="QRCode" value={formatTokenId(cert.id)} size={96} />
+                </div>
+                <button 
+                  onClick={downloadQR}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-container/10 text-primary-container hover:bg-primary-container/20 border border-primary-container/20 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
+                >
+                  <Download size={14} /> Download QR
+                </button>
               </div>
             </div>
           </div>
