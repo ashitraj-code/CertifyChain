@@ -1,7 +1,7 @@
 const Certificate = require("../models/Certificate");
 const AuditLog = require("../models/AuditLog");
 const { uploadToIPFS, fetchFromIPFS } = require("../services/ipfsService");
-const { mintCertificate, getCertificate: getBlockchainCert } = require("../services/blockchainService");
+const { mintCertificate, getCertificate: getBlockchainCert, getWalletAddress } = require("../services/blockchainService");
 const { generateHash, generateHashFromFile } = require("../utils/hashGenerator");
 
 /**
@@ -10,14 +10,14 @@ const { generateHash, generateHashFromFile } = require("../utils/hashGenerator")
  */
 exports.issueCertificate = async (req, res) => {
   try {
-    const { studentName, course, walletAddress } = req.body;
+    const { studentName, course } = req.body;
     const file = req.file;
 
     // Validate inputs
-    if (!studentName || !course || !walletAddress) {
+    if (!studentName || !course) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields: studentName, course, walletAddress",
+        error: "Missing required fields: studentName, course",
       });
     }
 
@@ -28,14 +28,9 @@ exports.issueCertificate = async (req, res) => {
       });
     }
 
-    // Validate wallet address format
-    if (!/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
-      return res.status(400).json({
-        success: false,
-        error: "Invalid wallet address format",
-      });
-    }
-
+    // Automatically use the Admin's Wallet Address
+    const walletAddress = getWalletAddress();
+    
     console.log(`📜 Issuing certificate for ${studentName}...`);
 
     // Step 1: Generate certificate hash from file

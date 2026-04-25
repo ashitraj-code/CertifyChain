@@ -16,7 +16,6 @@ export default function IssueCertificate() {
     studentName: '',
     course: '',
     date: '',
-    walletAddress: '',
   });
 
   const handleChange = (field) => (e) => {
@@ -39,7 +38,7 @@ export default function IssueCertificate() {
     e.preventDefault();
     setError('');
 
-    if (!formData.studentName || !formData.course || !formData.walletAddress) {
+    if (!formData.studentName || !formData.course) {
       setError('Please fill in all required fields');
       return;
     }
@@ -49,18 +48,12 @@ export default function IssueCertificate() {
       return;
     }
 
-    if (!/^0x[a-fA-F0-9]{40}$/.test(formData.walletAddress)) {
-      setError('Invalid wallet address format');
-      return;
-    }
-
     setLoading(true);
 
     try {
       const data = new FormData();
       data.append('studentName', formData.studentName);
       data.append('course', formData.course);
-      data.append('walletAddress', formData.walletAddress);
       data.append('file', selectedFile);
 
       const response = await fetch(`${API_BASE}/certificate/mint`, {
@@ -123,15 +116,6 @@ export default function IssueCertificate() {
                   value={formData.course}
                   onChange={handleChange('course')}
                   icon={Award}
-                  required
-                />
-                <FormInput
-                  label="Recipient Wallet Address"
-                  id="walletAddress"
-                  placeholder="0x..."
-                  value={formData.walletAddress}
-                  onChange={handleChange('walletAddress')}
-                  icon={Hash}
                   required
                 />
                 <FormInput
