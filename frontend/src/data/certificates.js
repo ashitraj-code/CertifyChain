@@ -116,7 +116,7 @@ export const auditLogs = [
   { id: 6, timestamp: '2024-02-27 16:22:11', action: 'PERMISSION_CHANGED', actor: 'superadmin@institution.edu', details: 'Updated role for user registrar@institution.edu to ISSUER', severity: 'WARNING', ip: '192.168.1.10' },
   { id: 7, timestamp: '2024-02-27 11:05:33', action: 'CERTIFICATE_ISSUED', actor: 'admin@institution.edu', details: 'Issued certificate CERT-2023-005 to Aisha Patel', severity: 'INFO', ip: '192.168.1.45' },
   { id: 8, timestamp: '2024-02-26 09:18:55', action: 'CERTIFICATE_REVOKED', actor: 'admin@institution.edu', details: 'Revoked certificate CERT-2023-004 – Administrative Error', severity: 'CRITICAL', ip: '192.168.1.45' },
-  { id: 9, timestamp: '2024-02-26 08:00:00', action: 'SYSTEM_BACKUP', actor: 'system@blockcert.io', details: 'Automated daily backup completed successfully', severity: 'INFO', ip: '127.0.0.1' },
+  { id: 9, timestamp: '2024-02-26 08:00:00', action: 'SYSTEM_BACKUP', actor: 'system@pramanit.io', details: 'Automated daily backup completed successfully', severity: 'INFO', ip: '127.0.0.1' },
   { id: 10, timestamp: '2024-02-25 22:14:07', action: 'LOGIN_FAILED', actor: 'unknown@attacker.com', details: 'Failed login attempt – invalid credentials', severity: 'CRITICAL', ip: '203.0.113.42' },
 ];
 
@@ -135,9 +135,9 @@ export const helpArticles = [
 ];
 
 export const faqItems = [
-  { question: 'What is BlockCert?', answer: 'BlockCert is a blockchain-based certificate verification platform that enables institutions to issue, verify, and manage digital credentials with cryptographic proof of authenticity.' },
+  { question: 'What is Pramanit?', answer: 'Pramanit is a blockchain-based certificate verification platform that enables institutions to issue, verify, and manage digital credentials with cryptographic proof of authenticity.' },
   { question: 'How does blockchain verification work?', answer: 'Each certificate is hashed and stored on the blockchain as an immutable record. When verification is requested, the system compares the certificate data against the on-chain record to confirm authenticity.' },
   { question: 'Can a certificate be revoked?', answer: 'Yes, authorized administrators can revoke certificates. The revocation is permanently recorded on the blockchain, ensuring all future verification attempts will reflect the updated status.' },
-  { question: 'What blockchain does BlockCert use?', answer: 'BlockCert operates on an Ethereum-compatible network, leveraging smart contracts for certificate issuance, verification, and revocation management.' },
-  { question: 'Is my data secure?', answer: 'Absolutely. BlockCert uses industry-standard encryption and only stores cryptographic hashes on the blockchain. No personal data is stored on-chain.' },
+  { question: 'What blockchain does Pramanit use?', answer: 'Pramanit operates on an Ethereum-compatible network, leveraging smart contracts for certificate issuance, verification, and revocation management.' },
+  { question: 'Is my data secure?', answer: 'Absolutely. Pramanit uses industry-standard encryption and only stores cryptographic hashes on the blockchain. No personal data is stored on-chain.' },
 ];

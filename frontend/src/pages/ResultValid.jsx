@@ -17,7 +17,7 @@ export default function ResultValid() {
     name: certData?.studentName || 'N/A',
     course: certData?.course || 'N/A',
     date: certData?.issuedAt ? new Date(certData.issuedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A',
-    issuer: 'BlockCert Network',
+    issuer: 'Pramanit Network',
     txHash: certData?.transactionHash || 'N/A',
     ipfsHash: certData?.ipfsHash || 'N/A',
     studentAddress: certData?.studentAddress || 'N/A',
@@ -80,7 +80,7 @@ export default function ResultValid() {
             Verified Certificate
           </h1>
           <p className="text-base text-on-surface-variant max-w-lg mx-auto">
-            This document has been cryptographically validated and matches the immutable record on the BlockCert network.
+            This document has been cryptographically validated and matches the immutable record on the Pramanit network.
           </p>
         </div>
 

@@ -27,7 +27,7 @@ export default function AdminLayout() {
         <div className="md:hidden sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-zinc-200/50 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Hexagon size={20} strokeWidth={1.5} className="text-zinc-900" />
-            <span className="font-medium text-zinc-900 tracking-wider uppercase text-sm">BlockCert</span>
+            <span className="font-medium text-zinc-900 tracking-wider uppercase text-sm">Pramanit</span>
           </div>
           <button 
             onClick={() => setSidebarOpen(true)}

@@ -31,7 +31,7 @@ export default function Navbar() {
               <Hexagon size={18} strokeWidth={2} className="text-indigo-600 group-hover:rotate-12 transition-transform duration-500" />
             </div>
             <span className="text-lg font-medium text-zinc-900 tracking-tight">
-              BlockCert
+              Pramanit
             </span>
           </Link>
 
