@@ -1,22 +1,50 @@
-import { useState } from 'react';
-import { Search, Filter, Download, Plus, ArrowUpRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Filter, Download, Plus, ArrowUpRight, Loader2 } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
-import { certificates } from '../data/certificates';
+import API_BASE from '../config/api';
 
 export default function CertificateRegistry() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [certificates, setCertificates] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCertificates = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/certificates`);
+        const data = await response.json();
+        if (data.success) {
+          setCertificates(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch certificates:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCertificates();
+  }, []);
 
   const filtered = certificates.filter((cert) => {
     const matchesSearch =
-      cert.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cert.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cert.course.toLowerCase().includes(searchQuery.toLowerCase());
+      cert.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cert.course.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(cert.tokenId).includes(searchQuery);
     const matchesStatus = statusFilter === 'All' || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 size={32} className="animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-12 animate-fade-in relative">
@@ -70,7 +98,7 @@ export default function CertificateRegistry() {
             <table className="w-full text-sm text-left whitespace-nowrap">
               <thead>
                 <tr className="border-b border-zinc-200 bg-zinc-50/50">
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">ID</th>
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Token</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Recipient</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Course</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Status</th>
@@ -78,19 +106,32 @@ export default function CertificateRegistry() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {filtered.map((cert) => (
-                  <tr key={cert.id} className="hover:bg-zinc-50/50 transition-colors group">
-                    <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">{cert.id}</td>
-                    <td className="px-6 py-4 font-medium text-zinc-900">{cert.name}</td>
-                    <td className="px-6 py-4 text-zinc-500">{cert.course}</td>
-                    <td className="px-6 py-4"><StatusBadge status={cert.status} /></td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="text-zinc-400 hover:text-indigo-600 transition-colors opacity-0 group-hover:opacity-100">
-                        <ArrowUpRight size={16} strokeWidth={1.5} />
-                      </button>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-8 text-center text-zinc-400">
+                      {certificates.length === 0 ? 'No certificates found.' : 'No matching certificates.'}
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filtered.map((cert) => (
+                    <tr key={cert._id} className="hover:bg-zinc-50/50 transition-colors group">
+                      <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">#{cert.tokenId}</td>
+                      <td className="px-6 py-4 font-medium text-zinc-900">{cert.studentName}</td>
+                      <td className="px-6 py-4 text-zinc-500">{cert.course}</td>
+                      <td className="px-6 py-4"><StatusBadge status={cert.status} /></td>
+                      <td className="px-6 py-4 text-right">
+                        <a
+                          href={`https://amoy.polygonscan.com/tx/${cert.transactionHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-zinc-400 hover:text-indigo-600 transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                          <ArrowUpRight size={16} strokeWidth={1.5} />
+                        </a>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -100,20 +141,6 @@ export default function CertificateRegistry() {
             <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400">
               {filtered.length} of {certificates.length} records
             </p>
-            <div className="flex gap-1">
-              {[1, 2, 3].map((p) => (
-                <button 
-                  key={p} 
-                  className={`w-8 h-8 rounded text-xs font-bold flex items-center justify-center transition-all
-                    ${p === 1 
-                      ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' 
-                      : 'text-zinc-400 hover:bg-zinc-50 hover:text-zinc-900'
-                    }`}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
           </div>
         </Card>
       </div>

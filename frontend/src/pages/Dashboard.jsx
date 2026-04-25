@@ -1,49 +1,99 @@
-import { LayoutDashboard, Award, ShieldCheck, TrendingUp, Plus, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { LayoutDashboard, Award, ShieldCheck, TrendingUp, Plus, ArrowRight, Loader2 } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
-import { dashboardStats, recentIssuances } from '../data/certificates';
-
-const statCards = [
-  {
-    label: 'Total Issued',
-    value: dashboardStats.totalCertificates.toLocaleString(),
-    icon: Award,
-    trend: '+12.5%',
-    trendUp: true,
-    color: 'text-indigo-400',
-    bg: 'bg-indigo-500/10 border-indigo-500/20',
-  },
-  {
-    label: 'Active Courses',
-    value: dashboardStats.activeCourses.toString(),
-    icon: LayoutDashboard,
-    trend: '+3',
-    trendUp: true,
-    color: 'text-sky-400',
-    bg: 'bg-sky-500/10 border-sky-500/20',
-  },
-  {
-    label: 'Verifications',
-    value: dashboardStats.verificationsThisMonth.toLocaleString(),
-    icon: ShieldCheck,
-    trend: '+28.3%',
-    trendUp: true,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10 border-emerald-500/20',
-  },
-  {
-    label: 'Revocations',
-    value: dashboardStats.revocations.toString(),
-    icon: TrendingUp,
-    trend: '-5.2%',
-    trendUp: false,
-    color: 'text-rose-400',
-    bg: 'bg-rose-500/10 border-rose-500/20',
-  },
-];
+import API_BASE from '../config/api';
 
 export default function Dashboard() {
+  const [stats, setStats] = useState(null);
+  const [certificates, setCertificates] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, certsRes] = await Promise.all([
+          fetch(`${API_BASE}/dashboard/stats`),
+          fetch(`${API_BASE}/certificates`),
+        ]);
+
+        const statsData = await statsRes.json();
+        const certsData = await certsRes.json();
+
+        if (statsData.success) setStats(statsData.data);
+        if (certsData.success) setCertificates(certsData.data.slice(0, 5));
+      } catch (err) {
+        console.error('Dashboard fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const statCards = [
+    {
+      label: 'Total Issued',
+      value: stats?.totalCertificates?.toLocaleString() || '0',
+      icon: Award,
+      trend: '+' + (stats?.totalCertificates || 0),
+      trendUp: true,
+      color: 'text-indigo-400',
+      bg: 'bg-indigo-500/10 border-indigo-500/20',
+    },
+    {
+      label: 'Active Courses',
+      value: stats?.activeCourses?.toString() || '0',
+      icon: LayoutDashboard,
+      trend: '+' + (stats?.activeCourses || 0),
+      trendUp: true,
+      color: 'text-sky-400',
+      bg: 'bg-sky-500/10 border-sky-500/20',
+    },
+    {
+      label: 'Verifications',
+      value: stats?.verificationsThisMonth?.toLocaleString() || '0',
+      icon: ShieldCheck,
+      trend: stats?.verificationsThisMonth?.toString() || '0',
+      trendUp: true,
+      color: 'text-emerald-400',
+      bg: 'bg-emerald-500/10 border-emerald-500/20',
+    },
+    {
+      label: 'Revocations',
+      value: stats?.revocations?.toString() || '0',
+      icon: TrendingUp,
+      trend: stats?.revocations?.toString() || '0',
+      trendUp: false,
+      color: 'text-rose-400',
+      bg: 'bg-rose-500/10 border-rose-500/20',
+    },
+  ];
+
+  const formatTimeAgo = (dateStr) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHrs = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHrs / 24);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} min ago`;
+    if (diffHrs < 24) return `${diffHrs} hours ago`;
+    return `${diffDays} days ago`;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 size={32} className="animate-spin text-indigo-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-12 animate-fade-in relative">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-400/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
@@ -98,7 +148,7 @@ export default function Dashboard() {
             <table className="w-full text-sm text-left whitespace-nowrap">
               <thead>
                 <tr className="border-b border-zinc-200 bg-zinc-50/50">
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">ID</th>
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Token</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Recipient</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Course</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Date</th>
@@ -106,17 +156,25 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {recentIssuances.map((item) => (
-                  <tr key={item.id} className="hover:bg-zinc-50/50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">{item.id}</td>
-                    <td className="px-6 py-4 font-medium text-zinc-900">{item.name}</td>
-                    <td className="px-6 py-4 text-zinc-500">{item.course}</td>
-                    <td className="px-6 py-4 text-zinc-400 text-xs">{item.date}</td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={item.status} />
+                {certificates.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-8 text-center text-zinc-400">
+                      No certificates issued yet. Click "New Document" to get started.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  certificates.map((item) => (
+                    <tr key={item._id} className="hover:bg-zinc-50/50 transition-colors">
+                      <td className="px-6 py-4 font-mono text-xs font-medium text-indigo-600">#{item.tokenId}</td>
+                      <td className="px-6 py-4 font-medium text-zinc-900">{item.studentName}</td>
+                      <td className="px-6 py-4 text-zinc-500">{item.course}</td>
+                      <td className="px-6 py-4 text-zinc-400 text-xs">{formatTimeAgo(item.createdAt)}</td>
+                      <td className="px-6 py-4">
+                        <StatusBadge status={item.status === 'Active' ? 'Minted' : item.status} />
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

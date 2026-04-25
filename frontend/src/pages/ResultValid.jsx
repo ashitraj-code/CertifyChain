@@ -1,16 +1,26 @@
+import { useLocation } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, ExternalLink, Shield, Calendar, User, Award, Hash, Copy } from 'lucide-react';
 import Button from '../components/Button';
 import Card from '../components/Card';
 
 export default function ResultValid() {
+  const location = useLocation();
+  const certData = location.state?.certificate;
+  const status = location.state?.status || 'VALID';
+
   const cert = {
-    id: 'CERT-2023-001',
-    name: 'Eleanor Vance',
-    course: 'Master of Science in Cryptography',
-    date: 'October 24, 2023',
-    issuer: 'Stanford University',
-    txHash: '0x8fB3c9A7e2B4d1C5f6...4d2E1aB9f',
-    blockNumber: 18234567,
+    id: certData?.tokenId ?? 'N/A',
+    name: certData?.studentName || 'N/A',
+    course: certData?.course || 'N/A',
+    date: certData?.issuedAt ? new Date(certData.issuedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A',
+    issuer: 'CertiChain Network',
+    txHash: certData?.transactionHash || 'N/A',
+    ipfsHash: certData?.ipfsHash || 'N/A',
+    studentAddress: certData?.studentAddress || 'N/A',
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
   };
 
   return (
@@ -44,9 +54,9 @@ export default function ResultValid() {
           <div className="flex items-center gap-3">
             <Shield size={20} className="text-success" />
             <div>
-              <p className="text-sm font-bold text-success">Blockchain Verified</p>
+              <p className="text-sm font-bold text-success">Blockchain Verified — {status}</p>
               <p className="text-xs text-success/70">
-                Cryptographic signature confirmed at block #{cert.blockNumber.toLocaleString()}
+                Cryptographic signature confirmed • Token #{cert.id}
               </p>
             </div>
           </div>
@@ -64,7 +74,7 @@ export default function ResultValid() {
                 <Hash size={16} className="text-primary-container" />
               </div>
               <div>
-                <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">Certificate ID</p>
+                <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">Token ID</p>
                 <p className="text-sm font-bold text-on-surface font-mono">{cert.id}</p>
               </div>
             </div>
@@ -101,6 +111,17 @@ export default function ResultValid() {
 
             <hr className="border-surface-container-high" />
 
+            {/* IPFS Hash */}
+            <div>
+              <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-2">IPFS Hash</p>
+              <div className="flex items-center gap-2 bg-surface-container-low rounded-lg px-4 py-3">
+                <code className="text-xs font-mono text-primary-container flex-1 truncate">{cert.ipfsHash}</code>
+                <button onClick={() => copyToClipboard(cert.ipfsHash)} className="p-1.5 rounded-md hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors cursor-pointer">
+                  <Copy size={14} />
+                </button>
+              </div>
+            </div>
+
             {/* Transaction Hash */}
             <div>
               <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-2">
@@ -110,7 +131,7 @@ export default function ResultValid() {
                 <code className="text-xs font-mono text-primary-container flex-1 truncate">
                   {cert.txHash}
                 </code>
-                <button className="p-1.5 rounded-md hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors cursor-pointer">
+                <button onClick={() => copyToClipboard(cert.txHash)} className="p-1.5 rounded-md hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors cursor-pointer">
                   <Copy size={14} />
                 </button>
               </div>
@@ -118,9 +139,16 @@ export default function ResultValid() {
           </div>
 
           <div className="mt-6 pt-6 border-t border-surface-container-high">
-            <Button variant="primary" className="w-full" icon={ExternalLink}>
-              View on Blockchain
-            </Button>
+            <a
+              href={cert.txHash !== 'N/A' ? `https://amoy.polygonscan.com/tx/${cert.txHash}` : '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full"
+            >
+              <Button variant="primary" className="w-full" icon={ExternalLink}>
+                View on Polygonscan
+              </Button>
+            </a>
           </div>
         </Card>
       </div>

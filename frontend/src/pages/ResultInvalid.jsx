@@ -1,8 +1,14 @@
+import { useLocation } from 'react-router-dom';
 import { ArrowLeft, XCircle, AlertTriangle, MessageCircle, RefreshCw } from 'lucide-react';
 import Button from '../components/Button';
 import Card from '../components/Card';
 
 export default function ResultInvalid() {
+  const location = useLocation();
+  const errorMsg = location.state?.error || 'Certificate verification failed';
+  const status = location.state?.status || 'INVALID';
+  const tokenId = location.state?.tokenId || 'N/A';
+
   return (
     <div className="max-w-[1280px] mx-auto px-6 py-12">
       {/* Back link */}
@@ -24,7 +30,7 @@ export default function ResultInvalid() {
             Verification Failed
           </h1>
           <p className="text-base text-on-surface-variant max-w-lg mx-auto">
-            This certificate could not be found on the cryptographic ledger, or its digital signature has been tampered with.
+            This certificate could not be verified on the blockchain ledger.
           </p>
         </div>
 
@@ -33,11 +39,11 @@ export default function ResultInvalid() {
           <div className="flex items-start gap-3">
             <AlertTriangle size={20} className="text-error flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-bold text-error mb-1">Certificate Not Found</p>
+              <p className="text-sm font-bold text-error mb-1">
+                {status === 'REVOKED' ? 'Certificate Revoked' : 'Certificate Not Found'}
+              </p>
               <p className="text-xs text-error/70 leading-relaxed">
-                The provided certificate ID does not correspond to any credential registered on the
-                CertiChain blockchain network. This could mean the certificate was never issued through
-                our platform, has been revoked, or the ID was entered incorrectly.
+                Token ID: {tokenId} — {errorMsg}
               </p>
             </div>
           </div>
@@ -50,7 +56,7 @@ export default function ResultInvalid() {
           </h2>
           <ul className="space-y-3">
             {[
-              'The certificate ID was entered incorrectly',
+              'The Token ID was entered incorrectly',
               'The certificate was issued outside the CertiChain network',
               'The credential has been permanently revoked by the issuing institution',
               'The digital signature has been tampered with or corrupted',

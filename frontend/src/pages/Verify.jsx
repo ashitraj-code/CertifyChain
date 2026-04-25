@@ -1,20 +1,47 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, QrCode, ArrowRight } from 'lucide-react';
+import { Search, QrCode, ArrowRight, Loader2 } from 'lucide-react';
 import Button from '../components/Button';
+import API_BASE from '../config/api';
 
 export default function Verify() {
   const [certId, setCertId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
-    if (certId.trim()) {
-      if (certId.toLowerCase().includes('invalid')) {
-        navigate('/result-invalid');
+    if (!certId.trim()) return;
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(`${API_BASE}/verify/${certId.trim()}`);
+      const result = await response.json();
+
+      if (result.success && result.status === 'VALID') {
+        navigate('/result-valid', { state: { certificate: result.data, status: result.status } });
       } else {
-        navigate('/result-valid');
+        navigate('/result-invalid', {
+          state: {
+            error: result.error || 'Certificate verification failed',
+            status: result.status,
+            tokenId: certId,
+          },
+        });
       }
+    } catch (err) {
+      navigate('/result-invalid', {
+        state: {
+          error: 'Could not connect to the verification server',
+          status: 'ERROR',
+          tokenId: certId,
+        },
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,8 +57,14 @@ export default function Verify() {
             Verify Document
           </h1>
           <p className="text-lg text-zinc-500 font-light leading-relaxed mb-12">
-            Enter a cryptographic ID or scan a document QR code to verify authenticity against the blockchain ledger.
+            Enter a Token ID to verify the certificate authenticity against the blockchain ledger.
           </p>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700 mb-6 animate-fade-in">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleVerify} className="space-y-8 animate-fade-in stagger-1">
             <div className="relative group">
@@ -40,12 +73,12 @@ export default function Verify() {
                 type="text"
                 value={certId}
                 onChange={(e) => setCertId(e.target.value)}
-                placeholder="ID (e.g. CERT-2026-001)"
+                placeholder="Token ID (e.g. 0, 1, 2...)"
                 className="w-full pl-10 pr-4 py-4 bg-transparent border-b border-zinc-200 text-xl font-light text-zinc-900 placeholder:text-zinc-300 focus:border-indigo-600 focus:outline-none transition-all"
               />
             </div>
-            <Button type="submit" variant="primary" size="lg" icon={ArrowRight}>
-              Run Verification
+            <Button type="submit" variant="primary" size="lg" icon={loading ? Loader2 : ArrowRight} disabled={loading}>
+              {loading ? 'Verifying...' : 'Run Verification'}
             </Button>
           </form>
         </div>

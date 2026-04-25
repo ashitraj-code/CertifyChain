@@ -1,13 +1,21 @@
+import { useLocation } from 'react-router-dom';
 import { Check, Copy, ArrowRight, ArrowUpRight } from 'lucide-react';
 import Button from '../components/Button';
 
 export default function Success() {
+  const location = useLocation();
+  const certData = location.state?.certificate;
+
   const cert = {
-    id: 'CERT-2024-009',
-    name: 'Eleanor Vance',
-    course: 'Master of Science in Cryptography',
-    date: 'October 24, 2023',
-    txHash: '0x8fB3c9A...4d2E1aB9f',
+    id: certData?.tokenId ?? 'N/A',
+    name: certData?.studentName || 'N/A',
+    course: certData?.course || 'N/A',
+    txHash: certData?.transactionHash || 'N/A',
+    ipfsHash: certData?.ipfsHash || 'N/A',
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
   };
 
   return (
@@ -26,7 +34,7 @@ export default function Success() {
             Successfully Minted
           </h1>
           <p className="text-emerald-600/80 font-medium">
-            Document anchored to block #18236674
+            Certificate NFT minted • Token #{cert.id}
           </p>
         </div>
 
@@ -37,10 +45,10 @@ export default function Success() {
           <div className="flex flex-col gap-8 relative z-10">
             <div className="flex items-center justify-between p-4 bg-zinc-900/50 rounded-xl border border-zinc-800">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Hash ID</p>
-                <p className="text-sm font-mono font-medium text-emerald-400">{cert.id}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Token ID</p>
+                <p className="text-sm font-mono font-medium text-emerald-400">#{cert.id}</p>
               </div>
-              <button className="p-2 rounded text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800 transition-colors">
+              <button onClick={() => copyToClipboard(String(cert.id))} className="p-2 rounded text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800 transition-colors">
                 <Copy size={16} strokeWidth={1.5} />
               </button>
             </div>
@@ -55,9 +63,18 @@ export default function Success() {
                 <p className="text-sm font-bold text-white">{cert.course}</p>
               </div>
               <div className="flex justify-between items-end border-b border-zinc-800 pb-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">IPFS</p>
+                <p className="text-sm font-mono text-emerald-500 truncate max-w-[200px]">{cert.ipfsHash}</p>
+              </div>
+              <div className="flex justify-between items-end border-b border-zinc-800 pb-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Transaction</p>
-                <a href="#" className="flex items-center gap-1 text-sm font-mono text-emerald-500 hover:text-emerald-400 transition-colors">
-                  {cert.txHash}
+                <a
+                  href={`https://amoy.polygonscan.com/tx/${cert.txHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-sm font-mono text-emerald-500 hover:text-emerald-400 transition-colors truncate max-w-[200px]"
+                >
+                  {cert.txHash.substring(0, 10)}...{cert.txHash.substring(cert.txHash.length - 8)}
                   <ArrowUpRight size={14} strokeWidth={1.5} />
                 </a>
               </div>
