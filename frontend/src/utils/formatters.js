@@ -38,11 +38,13 @@ export const truncateHash = (hash, startChars = 8, endChars = 6) => {
 // Generates an IPFS Gateway URL
 export const getIpfsUrl = (ipfsHash) => {
   if (!ipfsHash || ipfsHash === 'N/A') return '#';
-  return `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
+  const gateway = import.meta.env.VITE_IPFS_GATEWAY || 'https://gateway.pinata.cloud/ipfs/';
+  return `${gateway}${ipfsHash}`;
 };
 
-// Generates a Polygonscan Transaction URL
+// Generates a Blockchain Explorer Transaction URL
 export const getPolygonscanUrl = (txHash) => {
   if (!txHash || txHash === 'N/A') return '#';
-  return `https://amoy.polygonscan.com/tx/${txHash}`;
+  const explorer = import.meta.env.VITE_BLOCK_EXPLORER_URL || 'https://amoy.polygonscan.com/tx/';
+  return `${explorer}${txHash}`;
 };

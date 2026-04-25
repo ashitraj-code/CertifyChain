@@ -3,6 +3,7 @@ import { Database, ArrowUpRight, Clock, Cpu, Loader2 } from 'lucide-react';
 import Card from '../components/Card';
 import StatusBadge from '../components/StatusBadge';
 import API_BASE from '../config/api';
+import { getPolygonscanUrl } from '../utils/formatters';
 
 export default function BlockchainExplorer() {
   const [transactions, setTransactions] = useState([]);
@@ -110,7 +111,7 @@ export default function BlockchainExplorer() {
                   <tr key={i} className="border-b border-surface-container-high last:border-0 hover:bg-surface-container-low transition-colors">
                     <td className="px-5 py-4 font-mono text-xs text-primary-container font-semibold">
                       {tx.hash !== 'N/A' ? (
-                        <a href={`https://amoy.polygonscan.com/tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                        <a href={getPolygonscanUrl(tx.hash)} target="_blank" rel="noopener noreferrer" className="hover:underline">
                           {truncateHash(tx.hash)}
                         </a>
                       ) : (

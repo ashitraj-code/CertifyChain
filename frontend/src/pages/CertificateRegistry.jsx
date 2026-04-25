@@ -168,7 +168,7 @@ export default function CertificateRegistry() {
                           <QRCode id={`QRCode-Registry-${cert.tokenId}`} value={formatTokenId(cert.tokenId)} size={120} />
                         </div>
                         <a
-                          href={`https://amoy.polygonscan.com/tx/${cert.transactionHash}`}
+                          href={getPolygonscanUrl(cert.transactionHash)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1.5 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100"

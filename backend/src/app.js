@@ -16,7 +16,20 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -78,6 +91,6 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`\n🚀 CertiChain Backend running on port ${PORT}`);
-  console.log(`📡 API Base: http://localhost:${PORT}/api`);
-  console.log(`🔗 Health Check: http://localhost:${PORT}/\n`);
+  console.log(`📡 API Base route initialized`);
+  console.log(`🔗 Health Check route active\n`);
 });
